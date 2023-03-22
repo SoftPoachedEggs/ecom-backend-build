@@ -43,7 +43,7 @@ Your database should contain the following four models, including the requiremen
 
 Category
 
-id
+<!-- id
 
 Integer
 
@@ -58,6 +58,8 @@ category_name
 String
 
 Doesn't allow null values
+ -->
+
 
 Product
 
@@ -91,6 +93,7 @@ Integer
 
 Doesn't allow null values
 
+
 Set a default value of 10
 
 Validates that the value is numeric
@@ -116,6 +119,8 @@ Uses auto increment
 tag_name
 
 String
+
+
 
 ProductTag
 
