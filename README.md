@@ -23,7 +23,7 @@ Install packages using "npm install" and run schema using "mysql2" and start ser
 ## Use
 For educational purposes only
 ## Visual
-![Visual]
+![Visual]()
 https://user-images.githubusercontent.com/115499632/228087360-e7092172-5d12-4cc7-b0e6-8c3380093620.mov
 ## Contributing
 None.
