@@ -13,10 +13,10 @@ router.get('/', async (req, res) => {
 
 // find a category by id
 router.get('/:id', async (req, res) => {
-  const singleTagData = await Category.findByPk(req.params.id).catch((err) => {
+  const singleTag = await Category.findByPk(req.params.id).catch((err) => {
     res.json(err);
   });
-  res.json(singleTagData);
+  res.json(singleTag);
 });
 
 // create a new category
@@ -39,12 +39,12 @@ router.put('/:id', async (req, res) => {
 
 // delete a category by id
 router.delete('/:id', async (req, res) => {
-  let numberOfDeletedEntries = await Category.destroy({
+  let deletedEntries = await Category.destroy({
     where: {
       id: req.params.id,
     }
   });
-  res.json(numberOfDeletedEntries);
+  res.json(deletedEntries);
 });
 
 module.exports = router;

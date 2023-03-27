@@ -6,18 +6,18 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // get all products
 router.get('/', async (req, res) => {
   // find all products
-  const productData = await Product.findAll().catch((err) => {
+  const allProducts = await Product.findAll().catch((err) => {
     res.json(err);
   });
-  res.json(productData);
+  res.json(allProducts);
 });
 
 // get one product
 router.get('/:id', async (req, res) => { 
-    const singleProductData = await Product.findByPk(req.params.id).catch((err) => {
+    const oneProduct = await Product.findByPk(req.params.id).catch((err) => {
     res.json(err);
   });
-  res.json(singleProductData);
+  res.json(oneProduct);
 });
 
 // create new product
@@ -55,26 +55,26 @@ router.put('/:id', (req, res) => {
     })
     .then((productTags) => {
       // get list
-      const productTagIds = productTags.map(({ tag_id }) => tag_id);
+      const productByTagId = productTags.map(({ tag_id }) => tag_id);
       // filter list
       const newProductTags = req.body.tagIds
-        .filter((tag_id) => !productTagIds.includes(tag_id))
+        .filter((tag_id) => !productByTagId.includes(tag_id))
         .map((tag_id) => {
           return {
             product_id: req.params.id,
             tag_id,
           };
         });
-        const productTagsToRemove = productTags
+        const deleteProductTag = productTags
         .filter(({ tag_id }) => !req.body.tagIds.includes(tag_id))
         .map(({ id }) => id);
 
       return Promise.all([
-        ProductTag.destroy({ where: { id: productTagsToRemove } }),
+        ProductTag.destroy({ where: { id: deleteProductTag } }),
         ProductTag.bulkCreate(newProductTags),
       ]);
     })
-    .then((updatedProductTags) => res.json(updatedProductTags))
+    .then((updatedTags) => res.json(updatedTags))
     .catch((err) => {
       res.status(400).json(err);
     });

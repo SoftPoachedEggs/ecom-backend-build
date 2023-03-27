@@ -13,10 +13,10 @@ router.get('/', async (req, res) => {
 
 //get tag by id
 router.get('/:id', async (req, res) => {
-  let singleTagData = await Tag.findByPk(req.params.id).catch((err) => {
+  let tagByID = await Tag.findByPk(req.params.id).catch((err) => {
     res.json(err);
   });
-  res.json(singleTagData);
+  res.json(tagByID);
 });
 
 // create a new tag
@@ -29,22 +29,22 @@ router.post('/', async (req, res) => {
 
   // update a tag name by id
 router.put('/:id', async (req, res) => {
-  let updatedData = await Tag.update(req.body, {
+  let updatedID = await Tag.update(req.body, {
     where: {
       id: req.params.id,
     }
   });
-  res.json(updatedData);
+  res.json(updatedID);
 });
 
   // delete tag by id
 router.delete('/:id', async (req, res) => {
-  let numberOfDeletedEntries = await Tag.destroy({
+  let deletedbyID = await Tag.destroy({
     where: {
       id: req.params.id,
     }
   });
-  res.json(numberOfDeletedEntries);
+  res.json(deletedbyID);
 });
 
 module.exports = router;
