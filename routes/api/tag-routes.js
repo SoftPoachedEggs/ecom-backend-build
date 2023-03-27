@@ -5,8 +5,7 @@ const { update } = require('../../models/Product');
 // The `/api/tags` endpoint
 
 router.get('/', async (req, res) => {
-  // find all tags
-  // be sure to include its associated Product data
+
   let tagData = await Tag.findAll().catch((err) => {
     res.json(err);
   });
@@ -14,8 +13,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-  // find a single tag by its `id`
-  // be sure to include its associated Product data
+
   let singleTagData = await Tag.findByPk(req.params.id).catch((err) => {
     res.json(err);
   });
