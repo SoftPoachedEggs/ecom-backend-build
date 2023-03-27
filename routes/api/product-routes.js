@@ -7,28 +7,20 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 router.get('/', async (req, res) => {
   // find all products
   // be sure to include its associated Category and Tag data
-  try {
-    const allProducts = await Product.findAll();
-    res.status(200).json(allProducts);
-  } catch (err) {
-    res.status(500).json("Could not get all product", err);
-  }
+  const productData = await Product.findAll().catch((err) => {
+    res.json(err);
+  });
+  res.json(productData);
 });
 
 // get one product
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res) => { 
   // find a single product by its `id`
   // be sure to include its associated Category and Tag data
-  try {
-    const productID = await Product.findOne({
-      where: {
-        productTag_id: req.body.productTag_id,
-      },
-    });
-    res.status(200).json(productID);
-  } catch (err) {
-    res.status(400).json({ message: "Category ID not found!" });
-  }
+  const singleProductData = await Product.findByPk(req.params.id).catch((err) => {
+    res.json(err);
+  });
+  res.json(singleProductData);
 });
 
 // create new product
@@ -41,20 +33,6 @@ router.post('/', async (req, res) => {
       tagIds: [1, 2, 3, 4]
     }
   */
-    try {
-      const newProduct = await Product.create({
-        product_name: req.body.product_name,
-        price: req.body.price,
-        stock: req.body.stock,
-        tagIds: req.body.tagIds,
-      });
-  
-      console.log("This is new product", newProduct);
-      // res.status(200).json(newProduct);
-    } catch (err) {
-      res.status(500).json(err);
-    }
-
   Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
@@ -119,8 +97,14 @@ router.put('/:id', (req, res) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   // delete one product by its `id` value
+  let numberOfDeletedEntries = await Product.destroy({
+    where: {
+      id: req.params.id,
+    }
+  });
+  res.json(numberOfDeletedEntries);
 });
 
 module.exports = router;

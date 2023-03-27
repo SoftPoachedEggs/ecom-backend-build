@@ -6,69 +6,47 @@ const { Category, Product } = require('../../models');
 router.get('/', async (req, res) => {
   // find all categories
   // be sure to include its associated Products
-  try {
-    const allCategories = await Category.findAll();
-    res.status(200).json(allCategories);
-  } catch (err) {
-    res.status(500).json("could not get categories", err);
-  }
+  const categoryData = await Category.findAll().catch((err) => {
+    res.json(err);
+  });
+  res.json(categoryData);
 });
-
 
 router.get('/:id', async (req, res) => {
   // find one category by its `id` value
   // be sure to include its associated Products
-  try {
-    const user = await Category.findOne({
-      where: {
-        category_id: req.body.category_id,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({ message: "Category ID not found!" });
-  }
-});
-router.post('/', async (req, res) => {
-  // create a new category
-    try {
-    await Category.create({
-      category_id: req.session.category_id,
-      category_name: req.body.category_name,
-    });
-    res.status(200).json("activity created");
-  } catch (err) {
-    res.status(500).json(err);
-  }
+  const singleTagData = await Category.findByPk(req.params.id).catch((err) => {
+    res.json(err);
+  });
+  res.json(singleTagData);
 });
 
+router.post('/', async (req, res) => {
+  // create a new category
+  let newCategory = await Category.create(req.body).catch((err) => {
+    res.json(err);
+  })
+  res.json(newCategory); 
+});
 
 router.put('/:id', async (req, res) => {
   // update a category by its `id` value
-  try {
-    const response = await Category.update(req.body, {
-      where: {
-        category_id: req.session.category_id,
-      },
-    });
-    res.status(200).json(response);
-  } catch (err) {
-    res.status(500).json(err);
-  }
+  let updatedData = await Category.update(req.body, {
+    where: {
+      id: req.params.id,
+    },
+  });
+  res.json(updatedData);
 });
-
 
 router.delete('/:id', async (req, res) => {
   // delete a category by its `id` value
-  try {
-    const response = await Category.destroy({
-      where: {
-        category_id: req.session.category_id,
-      },
-    });
-    res.status(200).json(response);
-  } catch (err) {
-    res.status(500).json(err);
-  }
+  let numberOfDeletedEntries = await Category.destroy({
+    where: {
+      id: req.params.id,
+    }
+  });
+  res.json(numberOfDeletedEntries);
 });
 
 module.exports = router;
